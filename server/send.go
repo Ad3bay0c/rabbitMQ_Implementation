@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/streadway/amqp"
 	"log"
 )
@@ -37,14 +38,27 @@ func main() {
 		nil,     // arguments
 	)
 	failOnError(err, "Failed to publish a message")
+	for i := 0; i < 10; i++ {
+		body := fmt.Sprintf("Message %d", i)
+		err = ch.Publish(
+			"",     // exchange
+			q.Name, // routing key
+			false,  // mandatory
+			false,  // immediate
+			amqp.Publishing{
+				ContentType: "text/plain",
+				Body:        []byte(body),
+			})
+		failOnError(err, "Failed to publish a message")
+	}
 
-	err = ch.Publish(
-		"",
-		q.Name,
-		false,
-		false,
-		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte("Hello World!"),
-		})
+	//err = ch.Publish(
+	//	"",
+	//	q.Name,
+	//	false,
+	//	false,
+	//	amqp.Publishing{
+	//		ContentType: "text/plain",
+	//		Body:        []byte("Hello World!"),
+	//	})
 }
