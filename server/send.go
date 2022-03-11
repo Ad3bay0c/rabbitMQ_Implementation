@@ -28,7 +28,6 @@ func main() {
 		}
 	}()
 
-
 	q, err := ch.QueueDeclare(
 		"hello", // name
 		false,   // durable

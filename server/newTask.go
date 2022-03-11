@@ -30,8 +30,8 @@ func main() {
 	}()
 
 	q, err := ch.QueueDeclare(
-		"hello", // name
-		false,   // durable
+		"new_task", // name
+		true,   // durable
 		false,   // delete when unused
 		false,   // exclusive
 		false,   // no-wait
@@ -47,6 +47,7 @@ func main() {
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
 			ContentType: "text/plain",
 			Body:        []byte(body),
 		})
